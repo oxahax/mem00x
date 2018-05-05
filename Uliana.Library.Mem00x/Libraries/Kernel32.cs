@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using Uliana.Library.Mem00x.Enums;
 using Uliana.Library.Mem00x.Structs;
 
@@ -95,6 +92,93 @@ namespace Uliana.Library.Mem00x.Libraries {
 
         [DllImport("kernel32.dll")]
         static extern int ResumeThread(IntPtr hThread);
+
+        [DllImport("kernel32.dll")]
+        static extern bool WriteProcessMemory(
+            IntPtr hProcess,
+            IntPtr lpBaseAddress,
+            string lpBuffer,
+            UIntPtr nSize,
+            out IntPtr lpNumberOfBytesWritten
+        );
+
+        [DllImport("kernel32.dll")]
+        static extern int GetProcessId(IntPtr handle);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+        static extern uint GetPrivateProfileString(
+           string lpAppName,
+           string lpKeyName,
+           string lpDefault,
+           StringBuilder lpReturnedString,
+           uint nSize,
+           string lpFileName);
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        static extern bool VirtualFreeEx(
+            IntPtr hProcess,
+            IntPtr lpAddress,
+            UIntPtr dwSize,
+            uint dwFreeType
+            );
+
+        [DllImport("kernel32.dll")]
+        private static extern bool ReadProcessMemory(IntPtr hProcess, UIntPtr lpBaseAddress, [Out] byte[] lpBuffer, UIntPtr nSize, IntPtr lpNumberOfBytesRead);
+
+        [DllImport("kernel32.dll")]
+        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] lpBuffer, IntPtr nSize, out long lpNumberOfBytesRead);
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        static extern IntPtr VirtualAllocEx(
+            IntPtr hProcess,
+            IntPtr lpAddress,
+            uint dwSize,
+            uint flAllocationType,
+            uint flProtect
+        );
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, ExactSpelling = true)]
+        public static extern UIntPtr GetProcAddress(
+            IntPtr hModule,
+            string procName
+        );
+
+        [DllImport("kernel32.dll", EntryPoint = "CloseHandle")]
+        private static extern bool _CloseHandle(IntPtr hObject);
+
+        [DllImport("kernel32.dll")]
+        public static extern int CloseHandle(
+        IntPtr hObject
+        );
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr GetModuleHandle(
+            string lpModuleName
+        );
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        internal static extern int WaitForSingleObject(
+            IntPtr handle,
+            int milliseconds
+        );
+
+        [DllImport("kernel32.dll")]
+        private static extern bool WriteProcessMemory(IntPtr hProcess, UIntPtr lpBaseAddress, byte[] lpBuffer, UIntPtr nSize, IntPtr lpNumberOfBytesWritten);
+
+        // Added to avoid casting to UIntPtr
+        [DllImport("kernel32.dll")]
+        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, UIntPtr nSize, out IntPtr lpNumberOfBytesWritten);
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr CreateRemoteThread(
+          IntPtr hProcess,
+          IntPtr lpThreadAttributes,
+          uint dwStackSize,
+          UIntPtr lpStartAddress, // raw Pointer into remote process  
+          IntPtr lpParameter,
+          uint dwCreationFlags,
+          out IntPtr lpThreadId
+        );
 
         #region Funções internas
 
