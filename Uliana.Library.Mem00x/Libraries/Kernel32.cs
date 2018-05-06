@@ -19,19 +19,22 @@ namespace Uliana.Library.Mem00x.Libraries {
         /// </summary>
         /// <param name="dwDesiredAccess">O acesso ao objeto do processo.
         /// Esse direito de acesso é verificado em relação ao descritor de segurança do processo.</param>
-        /// <param name="bInheritHandle">Caso <see cref="true"/>, os processos criados por esse processo herdarão o identificador.</param>
+        /// <param name="bInheritHandle">Caso <see>
+        ///         <cref>true</cref>
+        ///     </see>
+        ///     , os processos criados por esse processo herdarão o identificador.</param>
         /// <param name="dwProcessId">O identificador do processo local a ser aberto.</param>
         /// <returns>Se a função for bem-sucedida, o valor de retorno será um identificador aberto para o processo especificado.</returns>
         [DllImport("kernel32.dll")]
-        public static extern IntPtr OpenProcess(
+         public static extern IntPtr OpenProcess(
             uint dwDesiredAccess,
             bool bInheritHandle,
-            uint dwProcessId
+            int dwProcessId
         );
 
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool IsWow64Process(
+        public static extern bool IsWow64Process(
             [In] IntPtr hProcess,
             [Out] out bool wow64Process
         );
@@ -39,11 +42,11 @@ namespace Uliana.Library.Mem00x.Libraries {
 #if WINXP
 #else
         [DllImport("kernel32.dll", EntryPoint = "VirtualQueryEx")]
-        public static extern UIntPtr Native_VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress,
+         public static extern UIntPtr Native_VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress,
             out MemoryBasicInformation32 lpBuffer, UIntPtr dwLength);
 
         [DllImport("kernel32.dll", EntryPoint = "VirtualQueryEx")]
-        public static extern UIntPtr Native_VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress,
+         public static extern UIntPtr Native_VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress,
             out MemoryBasicInformation64 lpBuffer, UIntPtr dwLength);
 
         public static UIntPtr VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress,
@@ -81,20 +84,20 @@ namespace Uliana.Library.Mem00x.Libraries {
         }
 
         [DllImport("kernel32.dll")]
-        static extern void GetSystemInfo(out SystemInfo lpSystemInfo);
+        public static extern void GetSystemInfo(out SystemInfo lpSystemInfo);
 #endif
 
         [DllImport("kernel32.dll")]
-        static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
+        public static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
 
         [DllImport("kernel32.dll")]
-        static extern uint SuspendThread(IntPtr hThread);
+        public static extern uint SuspendThread(IntPtr hThread);
 
         [DllImport("kernel32.dll")]
-        static extern int ResumeThread(IntPtr hThread);
+        public static extern int ResumeThread(IntPtr hThread);
 
         [DllImport("kernel32.dll")]
-        static extern bool WriteProcessMemory(
+        public static extern bool WriteProcessMemory(
             IntPtr hProcess,
             IntPtr lpBaseAddress,
             string lpBuffer,
@@ -103,10 +106,10 @@ namespace Uliana.Library.Mem00x.Libraries {
         );
 
         [DllImport("kernel32.dll")]
-        static extern int GetProcessId(IntPtr handle);
+        public static extern int GetProcessId(IntPtr handle);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-        static extern uint GetPrivateProfileString(
+        public static extern uint GetPrivateProfileString(
            string lpAppName,
            string lpKeyName,
            string lpDefault,
@@ -115,7 +118,7 @@ namespace Uliana.Library.Mem00x.Libraries {
            string lpFileName);
 
         [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        static extern bool VirtualFreeEx(
+        public static extern bool VirtualFreeEx(
             IntPtr hProcess,
             IntPtr lpAddress,
             UIntPtr dwSize,
@@ -123,13 +126,13 @@ namespace Uliana.Library.Mem00x.Libraries {
             );
 
         [DllImport("kernel32.dll")]
-        private static extern bool ReadProcessMemory(IntPtr hProcess, UIntPtr lpBaseAddress, [Out] byte[] lpBuffer, UIntPtr nSize, IntPtr lpNumberOfBytesRead);
+        public static extern bool ReadProcessMemory(IntPtr hProcess, UIntPtr lpBaseAddress, [Out] byte[] lpBuffer, UIntPtr nSize, IntPtr lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll")]
-        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] lpBuffer, IntPtr nSize, out long lpNumberOfBytesRead);
+        public static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] lpBuffer, IntPtr nSize, out long lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        static extern IntPtr VirtualAllocEx(
+        public static extern IntPtr VirtualAllocEx(
             IntPtr hProcess,
             IntPtr lpAddress,
             uint dwSize,
@@ -138,39 +141,39 @@ namespace Uliana.Library.Mem00x.Libraries {
         );
 
         [DllImport("kernel32.dll", CharSet = CharSet.Ansi, ExactSpelling = true)]
-        public static extern UIntPtr GetProcAddress(
+         public static extern UIntPtr GetProcAddress(
             IntPtr hModule,
             string procName
         );
 
         [DllImport("kernel32.dll", EntryPoint = "CloseHandle")]
-        private static extern bool _CloseHandle(IntPtr hObject);
+        public static extern bool _CloseHandle(IntPtr hObject);
 
         [DllImport("kernel32.dll")]
-        public static extern int CloseHandle(
+         public static extern int CloseHandle(
         IntPtr hObject
         );
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr GetModuleHandle(
+         public static extern IntPtr GetModuleHandle(
             string lpModuleName
         );
 
         [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        internal static extern int WaitForSingleObject(
+        public static extern int WaitForSingleObject(
             IntPtr handle,
             int milliseconds
         );
 
         [DllImport("kernel32.dll")]
-        private static extern bool WriteProcessMemory(IntPtr hProcess, UIntPtr lpBaseAddress, byte[] lpBuffer, UIntPtr nSize, IntPtr lpNumberOfBytesWritten);
+        public static extern bool WriteProcessMemory(IntPtr hProcess, UIntPtr lpBaseAddress, byte[] lpBuffer, UIntPtr nSize, IntPtr lpNumberOfBytesWritten);
 
         // Added to avoid casting to UIntPtr
         [DllImport("kernel32.dll")]
-        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, UIntPtr nSize, out IntPtr lpNumberOfBytesWritten);
+        public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, UIntPtr nSize, out IntPtr lpNumberOfBytesWritten);
 
         [DllImport("kernel32.dll")]
-        public static extern IntPtr CreateRemoteThread(
+         public static extern IntPtr CreateRemoteThread(
           IntPtr hProcess,
           IntPtr lpThreadAttributes,
           uint dwStackSize,
@@ -180,9 +183,13 @@ namespace Uliana.Library.Mem00x.Libraries {
           out IntPtr lpThreadId
         );
 
-        #region Funções internas
-
-        private static bool Is64Bit() {
+        #region Funções
+        
+        /// <summary>
+        /// Valida se a role do usuário atual é administrativa.
+        /// </summary>
+        /// <returns>Verdadeiro caso o usuário for administrador do sistema.</returns>
+        public static bool Is64Bit() {
             if ((Environment.OSVersion.Version.Major != 5 || Environment.OSVersion.Version.Minor < 1) &&
                 Environment.OSVersion.Version.Major < 6) return false;
 

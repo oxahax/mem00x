@@ -65,10 +65,10 @@ namespace Uliana.Library.Mem00x {
         /// arquivo de configuração.
         /// </summary>
         /// <param name="code">Pode ter várias entradas, onde são válidas:
-        /// Endereço absoluto;
-        /// Módulo + pointer + offset;
-        /// Módulo + offset;
-        /// Alias para arquivo de configuração.
+        /// endereço absoluto,
+        /// módulo + pointer + offset,
+        /// módulo + offset,
+        /// alias para arquivo de configuração.
         /// </param>
         /// <param name="type">Tipo da estrtura que ira ser escrita.</param>
         /// <param name="write">Valor para ser escrito.</param>
@@ -152,5 +152,37 @@ namespace Uliana.Library.Mem00x {
             
             return WriteProcessMemory(Handle, theCode, memory, (UIntPtr)size, IntPtr.Zero);
         }
+
+
+        /// <summary>
+        /// Suspende o processo carregado pelo Mem00x.
+        /// </summary>
+        public void SuspendProcess() =>
+            InternalProcess
+                .Threads
+                .Cast<ProcessThread>()
+                .ToList()
+                .ForEach(t => {
+                    var opened = OpenThread(ThreadAccess.SuspendResume, false, (uint)t.Id);
+                    SuspendThread(opened);
+                    CloseHandle(opened);
+                });
+
+        /// <summary>
+        /// Suspende o processo carregado pelo Mem00x.
+        /// </summary>
+        public void ResumeProcess() =>
+            InternalProcess
+                .Threads
+                .Cast<ProcessThread>()
+                .ToList()
+                .ForEach(t => {
+                    var opened = OpenThread(ThreadAccess.SuspendResume, false, (uint)t.Id);
+                    int toResume;
+                    do {
+                        toResume = ResumeThread(opened);
+                    } while (toResume > 0);
+                    CloseHandle(opened);
+                });
     }
 }
