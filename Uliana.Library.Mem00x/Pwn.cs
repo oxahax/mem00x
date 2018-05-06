@@ -60,6 +60,20 @@ namespace Uliana.Library.Mem00x {
                 .Select(p => p.Id)
                 .FirstOrDefault();
 
+        /// <summary>
+        /// Realiza a escrita diretamente em um endereço de memória especificado pelo
+        /// arquivo de configuração.
+        /// </summary>
+        /// <param name="code">Pode ter várias entradas, onde são válidas:
+        /// Endereço absoluto;
+        /// Módulo + pointer + offset;
+        /// Módulo + offset;
+        /// Alias para arquivo de configuração.
+        /// </param>
+        /// <param name="type">Tipo da estrtura que ira ser escrita.</param>
+        /// <param name="write">Valor para ser escrito.</param>
+        /// <param name="file">Caminho até o arquivo de configuração.</param>
+        /// <returns>Caso nenhum erro aconteça, é retornado verdadeiro.</returns>
         public bool WriteToMemmory(string code, DataType type, string write, string file = null)
         {
             byte[] memory;
